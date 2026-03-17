@@ -38,3 +38,77 @@ model Feedback {
   content   String
   createdAt DateTime @default(now())
 }
+
+enum LeadType {
+  CLIENT
+  LAWYER
+}
+
+enum CaseStatus {
+  WON
+  IN_PROGRESS
+  LOST
+}
+
+model Lawyer {
+  id            Int             @id @default(autoincrement())
+  fullName      String
+  oabNumber     String?         @unique
+  email         String          @unique
+  phone         String?
+  city          String?
+  state         String?
+  bio           String
+  practiceAreas String[]
+  adHeadline    String?
+  adDescription String?
+  yearsExperience Int?
+  totalPoints   Int             @default(0)
+  level         Int             @default(1)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  cases         LawyerCase[]
+  showcases     ClientShowcase[]
+}
+
+model LawyerCase {
+  id           Int        @id @default(autoincrement())
+  title        String
+  summary      String
+  status       CaseStatus @default(WON)
+  isLegacy     Boolean    @default(false)
+  proofUrl     String?
+  pointsAwarded Int       @default(0)
+  occurredAt   DateTime?
+  createdAt    DateTime   @default(now())
+  lawyerId     Int
+  lawyer       Lawyer     @relation(fields: [lawyerId], references: [id], onDelete: Cascade)
+
+  @@index([lawyerId])
+}
+
+model ClientShowcase {
+  id          Int      @id @default(autoincrement())
+  clientName  String
+  photoUrl    String?
+  caseSummary String
+  consentGiven Boolean @default(true)
+  approved    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  lawyerId    Int?
+  lawyer      Lawyer?  @relation(fields: [lawyerId], references: [id], onDelete: SetNull)
+
+  @@index([approved, createdAt])
+}
+
+model Lead {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  phone     String
+  leadType  LeadType
+  message   String
+  createdAt DateTime @default(now())
+
+  @@index([leadType, createdAt])
+}
