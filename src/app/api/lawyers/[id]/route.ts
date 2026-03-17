@@ -17,9 +17,10 @@ function normalizePracticeAreas(value: unknown): string[] | undefined {
 
 export async function GET(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params;
     const lawyerId = Number(params.id);
     if (!Number.isInteger(lawyerId)) {
       return NextResponse.json({ error: 'ID inválido.' }, { status: 400 });
@@ -47,9 +48,10 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params;
     const lawyerId = Number(params.id);
     if (!Number.isInteger(lawyerId)) {
       return NextResponse.json({ error: 'ID inválido.' }, { status: 400 });

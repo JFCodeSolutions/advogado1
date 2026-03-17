@@ -7,7 +7,6 @@ node_modules
 # Prisma
 /generated/prisma
 prisma/dev.db
-prisma/migrations/
 
 # Next.js
 .next

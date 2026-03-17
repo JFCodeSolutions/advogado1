@@ -6,12 +6,17 @@ type Lawyer = {
   id: number;
   fullName: string;
   email: string;
+  oabNumber: string | null;
+  phone: string | null;
+  city: string | null;
+  state: string | null;
   bio: string;
   practiceAreas: string[];
   totalPoints: number;
   level: number;
   adHeadline: string | null;
   adDescription: string | null;
+  yearsExperience: number | null;
   _count?: { cases: number };
 };
 
@@ -94,7 +99,7 @@ export default function AdminPage() {
       bio: String(formData.get('bio') || ''),
       adHeadline: String(formData.get('adHeadline') || ''),
       adDescription: String(formData.get('adDescription') || ''),
-      yearsExperience: Number(formData.get('yearsExperience') || 0),
+      yearsExperience: String(formData.get('yearsExperience') || '').trim() || null,
       practiceAreas: String(formData.get('practiceAreas') || ''),
     };
 
@@ -242,11 +247,18 @@ export default function AdminPage() {
           <form onSubmit={handleLawyerSubmit} style={formGrid}>
             <input name="fullName" defaultValue={selectedLawyer?.fullName || ''} placeholder="Nome completo" required style={inputStyle} />
             <input name="email" type="email" defaultValue={selectedLawyer?.email || ''} placeholder="E-mail" required style={inputStyle} />
-            <input name="oabNumber" placeholder="Número OAB" style={inputStyle} />
-            <input name="phone" placeholder="Telefone" style={inputStyle} />
-            <input name="city" placeholder="Cidade" style={inputStyle} />
-            <input name="state" placeholder="UF" style={inputStyle} />
-            <input name="yearsExperience" type="number" min={0} placeholder="Anos de experiência" style={inputStyle} />
+            <input name="oabNumber" defaultValue={selectedLawyer?.oabNumber || ''} placeholder="Número OAB" style={inputStyle} />
+            <input name="phone" defaultValue={selectedLawyer?.phone || ''} placeholder="Telefone" style={inputStyle} />
+            <input name="city" defaultValue={selectedLawyer?.city || ''} placeholder="Cidade" style={inputStyle} />
+            <input name="state" defaultValue={selectedLawyer?.state || ''} placeholder="UF" style={inputStyle} />
+            <input
+              name="yearsExperience"
+              type="number"
+              min={0}
+              defaultValue={selectedLawyer?.yearsExperience ?? ''}
+              placeholder="Anos de experiência"
+              style={inputStyle}
+            />
             <input
               name="practiceAreas"
               defaultValue={selectedLawyer?.practiceAreas.join(', ') || ''}

@@ -12,9 +12,10 @@ function parseCaseStatus(rawValue: unknown): CaseStatus {
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params;
     const lawyerId = Number(params.id);
     if (!Number.isInteger(lawyerId)) {
       return NextResponse.json({ error: 'ID inválido.' }, { status: 400 });
